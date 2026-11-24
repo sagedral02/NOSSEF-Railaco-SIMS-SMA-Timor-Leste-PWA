@@ -1,0 +1,29 @@
+# Reverse proxy + automatic TLS (F14-02). /api/* goes straight to Django; everything else to Next.js.
+{$SITE_DOMAIN} {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options nosniff
+		Referrer-Policy same-origin
+		X-Frame-Options DENY
+		-Server
+	}
+	request_body /api/* {
+		max_size 20MB
+	}
+	handle /api/* {
+		reverse_proxy api:8000 {
+			header_up X-Forwarded-Proto {scheme}
+		}
+	}
+	handle /django-admin/* {
+		reverse_proxy api:8000
+	}
+	handle {
+		reverse_proxy web:3000
+	}
+	log {
+		output stdout
+		format json
+	}
+}

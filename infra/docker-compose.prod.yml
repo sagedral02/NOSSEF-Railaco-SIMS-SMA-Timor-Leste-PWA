@@ -1,0 +1,52 @@
+# Single-server production/staging stack (PRD §42, F14). Secrets come from .env.production (never committed).
+# Usage: docker compose -f infra/docker-compose.prod.yml --env-file .env.production up -d --build
+name: nossef
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nossef}
+      POSTGRES_USER: ${POSTGRES_USER:-nossef}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+    volumes: [pgdata:/var/lib/postgresql/data, ./backups:/backups]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-nossef}"], interval: 10s, retries: 5 }
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    volumes: [redisdata:/data]
+  api: &api
+    build: { context: .., dockerfile: infra/docker/api.Dockerfile }
+    restart: unless-stopped
+    env_file: ../.env.production
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-nossef}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-nossef}
+      REDIS_URL: redis://redis:6379/0
+    volumes: [privatefiles:/data/private]
+    depends_on: { db: { condition: service_healthy }, redis: { condition: service_started } }
+  migrate:
+    <<: *api
+    restart: "no"
+    command: ["sh", "-c", "python manage.py migrate --noinput && python manage.py seed_reference_data && python manage.py check_data_integrity"]
+  worker:
+    <<: *api
+    command: ["celery", "-A", "config", "worker", "-l", "info", "-Q", "default,reports,finance,imports,notifications,maintenance", "--concurrency", "2"]
+    healthcheck: { disable: true }
+  beat:
+    <<: *api
+    command: ["celery", "-A", "config", "beat", "-l", "info", "--schedule", "/tmp/celerybeat-schedule"]
+    healthcheck: { disable: true }
+  web:
+    build: { context: .., dockerfile: infra/docker/web.Dockerfile }
+    restart: unless-stopped
+    environment: { API_ORIGIN: http://api:8000 }
+    depends_on: [api]
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment: { SITE_DOMAIN: "${SITE_DOMAIN:?set SITE_DOMAIN}" }
+    volumes: [./caddy/Caddyfile:/etc/caddy/Caddyfile:ro, caddydata:/data, caddyconfig:/config]
+    depends_on: [web, api]
+volumes: { pgdata: {}, redisdata: {}, privatefiles: {}, caddydata: {}, caddyconfig: {} }

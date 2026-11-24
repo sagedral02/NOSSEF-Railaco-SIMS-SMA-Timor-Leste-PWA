@@ -1,0 +1,24 @@
+{
+  "name": "nossef-sims",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@10.34.7",
+  "engines": {
+    "node": ">=22.13",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter @nossef/web dev",
+    "build:web": "pnpm --filter @nossef/web build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "api:schema": "pnpm --filter @nossef/api-contracts generate"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "unrs-resolver"
+    ]
+  }
+}

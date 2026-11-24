@@ -1,0 +1,26 @@
+[project]
+name = "nossef-api"
+version = "1.0.0"
+requires-python = ">=3.12,<3.13"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py"]
+addopts = "-q --reuse-db"
+testpaths = ["modules", "common"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 140
+target-version = "py312"
+extend-exclude = ["migrations", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "DJ"]
+ignore = ["B904", "DJ001", "E501"]  # line length is handled by `ruff format`
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ruff.lint.isort]
+known-first-party = ["config", "common", "modules"]

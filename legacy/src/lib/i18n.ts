@@ -1,0 +1,68 @@
+export type Lang = 'tet' | 'pt' | 'id' | 'en';
+export const LANGS: { code: Lang; short: string; name: string }[] = [
+  { code: 'tet', short: 'TET', name: 'Tetun' },
+  { code: 'pt', short: 'PT', name: 'Português' },
+  { code: 'id', short: 'ID', name: 'Indonesia' },
+  { code: 'en', short: 'EN', name: 'English' },
+];
+
+type Dict = Record<string, [string, string, string, string]>; // tet, pt, id, en
+const D: Dict = {
+  'nav.dashboard': ['Painél', 'Painel', 'Beranda', 'Dashboard'],
+  'nav.admissions': ['Admisaun (PPDB)', 'Admissões', 'Pendaftaran (PPDB)', 'Admissions'],
+  'nav.students': ['Estudante', 'Estudantes', 'Siswa', 'Students'],
+  'nav.staff': ['Profesór & Funsionáriu', 'Professores & Pessoal', 'Guru & Staf', 'Teachers & Staff'],
+  'nav.academic': ['Akadémiku', 'Académico', 'Akademik', 'Academics'],
+  'nav.schedule': ['Orariu', 'Horário', 'Jadwal', 'Schedule'],
+  'nav.attendance': ['Prezensa', 'Presenças', 'Presensi', 'Attendance'],
+  'nav.grades': ['Valor & Pauta', 'Notas & Pautas', 'Nilai & Pauta', 'Grades'],
+  'nav.reports': ['Relatóriu Valór', 'Boletins', 'Rapor & Kenaikan', 'Report Cards'],
+  'nav.finance': ['Finansas (Propina)', 'Finanças (Propinas)', 'Keuangan (SPP)', 'Finance'],
+  'nav.counseling': ['Konsellu (BK)', 'Aconselhamento', 'Konseling (BK)', 'Counseling'],
+  'nav.extracurricular': ['Organizasaun', 'Organizações', 'Ekstrakurikuler', 'Activities'],
+  'nav.library': ['Biblioteka', 'Biblioteca', 'Perpustakaan', 'Library'],
+  'nav.assets': ['Patrimóniu', 'Património', 'Aset', 'Assets'],
+  'nav.announcements': ['Ánunsiu', 'Comunicados', 'Pengumuman', 'Announcements'],
+  'nav.reportsCenter': ['Relatóriu & Importa', 'Relatórios & Importação', 'Laporan & Impor', 'Reports & Imports'],
+  'nav.admin': ['Administrasaun', 'Administração', 'Administrasi', 'Administration'],
+  'nav.myHome': ['Hau-nia Painél', 'Meu Painel', 'Beranda Saya', 'My Home'],
+  'nav.menu': ['Menu', 'Menu', 'Menu', 'Menu'],
+  'nav.group.main': ['Prinsipál', 'Principal', 'Utama', 'Main'],
+  'nav.group.academic': ['Akadémiku', 'Académico', 'Akademik', 'Academic'],
+  'nav.group.operations': ['Operasaun', 'Operações', 'Operasional', 'Operations'],
+  'nav.group.nossef': ['Komunidade NOSSEF', 'Comunidade NOSSEF', 'Komunitas NOSSEF', 'NOSSEF Community'],
+  'nav.group.system': ['Sistema', 'Sistema', 'Sistem', 'System'],
+  'top.search': ['Buka estudante, NIS, fatura, ka menu...', 'Procurar estudante, NIS, fatura ou menu...', 'Cari siswa, NIS, invoice, atau menu...', 'Search students, IDs, invoices or menu...'],
+  'top.uploadValor': ['Upload Valor Excel', 'Carregar Pauta Excel', 'Upload Valor Excel', 'Upload Grades Excel'],
+  'top.online': ['Online', 'Online', 'Online', 'Online'],
+  'top.offline': ['Offline', 'Offline', 'Offline', 'Offline'],
+  'top.pending': ['pendente', 'pendentes', 'menunggu sinkron', 'pending sync'],
+  'top.notifications': ['Notifikasaun', 'Notificações', 'Notifikasi', 'Notifications'],
+  'top.logout': ['Sai', 'Terminar sessão', 'Keluar', 'Sign out'],
+  'top.markAllRead': ['Marka hotu lee ona', 'Marcar tudo como lido', 'Tandai semua dibaca', 'Mark all read'],
+  'common.save': ['Rai', 'Guardar', 'Simpan', 'Save'],
+  'common.cancel': ['Kansela', 'Cancelar', 'Batal', 'Cancel'],
+  'common.close': ['Taka', 'Fechar', 'Tutup', 'Close'],
+  'common.search': ['Buka', 'Procurar', 'Cari', 'Search'],
+  'common.all': ['Hotu', 'Todos', 'Semua', 'All'],
+  'common.export': ['Esporta', 'Exportar', 'Ekspor', 'Export'],
+  'common.print': ['Imprime', 'Imprimir', 'Cetak', 'Print'],
+  'common.year': ['Tinan Akadémiku', 'Ano Letivo', 'Tahun Ajaran', 'Academic Year'],
+  'common.trimester': ['Trimestre', 'Trimestre', 'Trimestre', 'Trimester'],
+  'login.title': ['Tama ba Sistema Informasaun NOSSEF', 'Entrar no Sistema de Informação NOSSEF', 'Masuk ke Sistem Informasi NOSSEF', 'Sign in to NOSSEF Information System'],
+  'login.subtitle': ['Uza konta ofisiál eskola nian', 'Utilize a conta oficial da escola', 'Gunakan akun resmi sekolah Anda', 'Use your official school account'],
+  'login.username': ['Username ka Email', 'Utilizador ou Email', 'Username atau Email', 'Username or Email'],
+  'login.password': ['Liafuan-pase', 'Palavra-passe', 'Kata Sandi', 'Password'],
+  'login.forgot': ['Haluha liafuan-pase?', 'Esqueceu a palavra-passe?', 'Lupa kata sandi?', 'Forgot password?'],
+  'login.submit': ['Tama', 'Entrar', 'Masuk', 'Sign in'],
+  'login.ppdb': ['Rejistu Estudante Foun (PPDB)', 'Inscrição de Novos Alunos', 'Pendaftaran Siswa Baru (PPDB)', 'New Student Admission'],
+  'login.ppdbStatus': ['Haree Status Seleksaun', 'Verificar Estado da Seleção', 'Cek Status Seleksi', 'Check Selection Status'],
+  'dash.title': ['Rezumu Operasionál', 'Resumo Operacional', 'Ringkasan Operasional', 'Operational Summary'],
+  'dash.teacherBanner': ['Painél Professór & Profesor da Turma: Submete Pauta Valor via EXCEL', 'Painel Professor & Diretor de Turma: Submeter Pauta via EXCEL', 'Painél Professór & Profesor da Turma: Submete Pauta Valor via EXCEL', 'Teacher & Homeroom Panel: Submit Grade Sheet via EXCEL'],
+  'dash.downloadModelo': ['Download Modelo Excel', 'Descarregar Modelo Excel', 'Download Modelo Excel', 'Download Excel Template'],
+};
+const IDX: Record<Lang, number> = { tet: 0, pt: 1, id: 2, en: 3 };
+export function translate(lang: Lang, key: string): string {
+  const row = D[key];
+  return row ? row[IDX[lang]] : key;
+}

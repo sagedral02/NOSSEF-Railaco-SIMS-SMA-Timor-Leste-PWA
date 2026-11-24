@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+/* Design tokens carried over unchanged from the previous UI (ui.md: Dropbox-like, no gradients, no emoji). */
+@theme {
+  --color-canvas: #F7F5F2;
+  --color-surface: #FFFFFF;
+  --color-hover: #F2F0EC;
+  --color-selected: #EBF2FF;
+  --color-ink: #1E1919;
+  --color-ink2: #524A3E;
+  --color-muted: #8C8275;
+  --color-accent: #0061FE;
+  --color-accent-hover: #0050D5;
+  --color-line: #E6E4E0;
+  --color-line-strong: #C6C1B9;
+  --color-ok: #1D783B;
+  --color-ok-bg: #E8F5EC;
+  --color-warn: #9E5800;
+  --color-warn-bg: #FEF4E6;
+  --color-bad: #C81E1E;
+  --color-bad-bg: #FDECEC;
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+body { background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+.font-mono, .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0.02em; }
+::selection { background: #CFE0FF; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.scroll-thin::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: #D9D5CF; border-radius: 8px; }
+.scroll-thin::-webkit-scrollbar-track { background: transparent; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+@keyframes slide-in { from { transform: translateX(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes sheet-up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+.anim-drawer { animation: sheet-up .18s ease-out; }
+@media (min-width: 768px) { .anim-drawer { animation: slide-in .18s ease-out; } }
+.anim-fade { animation: fade-in .15s ease-out; }
+@media (prefers-reduced-motion: reduce) { .anim-drawer, .anim-fade { animation: none; } }
+@media print {
+  body * { visibility: hidden; }
+  .print-area, .print-area * { visibility: visible; }
+  .print-area { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none !important; border: none !important; }
+  .no-print { display: none !important; }
+}

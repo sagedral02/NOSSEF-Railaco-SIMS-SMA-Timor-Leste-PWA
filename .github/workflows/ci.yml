@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: nossef
+          POSTGRES_PASSWORD: nossef_ci
+          POSTGRES_DB: nossef
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U nossef" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DJANGO_SECRET_KEY: ci-only-not-secret
+      DATABASE_URL: postgres://nossef:nossef_ci@localhost:5432/nossef
+      DEV_SYNC_TASKS: "true"
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: apps/api/requirements/lock.txt
+      - run: pip install -r requirements/lock.txt
+      - name: Lint
+        run: ruff check .
+      - name: Migrations are complete
+        run: python manage.py makemigrations --check --dry-run --settings=config.settings.test
+      - name: Tests
+        run: pytest --create-db
+      - name: Deploy checks (production settings)
+        env:
+          DJANGO_ALLOWED_HOSTS: sims.example.tl
+        run: python manage.py check --deploy --settings=config.settings.production
+      - name: OpenAPI schema is up to date
+        run: |
+          python manage.py spectacular --file /tmp/openapi.yaml --validate --settings=config.settings.test
+          diff -u ../../packages/api-contracts/openapi.yaml /tmp/openapi.yaml
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @nossef/web lint
+      - run: pnpm --filter @nossef/web typecheck
+      - run: pnpm --filter @nossef/web test
+      - run: pnpm --filter @nossef/web build

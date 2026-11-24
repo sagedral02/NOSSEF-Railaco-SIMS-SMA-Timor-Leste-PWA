@@ -1,0 +1,33 @@
+# secrets
+.env
+.env.*
+!.env.example
+!.env.production.example
+infra/backups/
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+apps/api/var/
+apps/api/staticfiles/
+# node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+# build/legacy artifacts
+legacy/dist/
+legacy/node_modules/
+legacy/server/data/
+coverage/
+playwright-report/
+test-results/
+apps/web/e2e/screens/
+apps/web/test-results/
+apps/web/.env.local
+apps/web-start.log
+apps/api/var-runserver.log
+*.log
+.vercel

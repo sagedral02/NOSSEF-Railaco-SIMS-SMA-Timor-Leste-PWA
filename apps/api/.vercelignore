@@ -1,0 +1,8 @@
+pyproject.toml
+.venv
+var
+staticfiles
+__pycache__
+*.log
+**/tests
+conftest.py

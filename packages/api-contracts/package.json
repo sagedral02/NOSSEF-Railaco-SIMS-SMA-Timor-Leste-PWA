@@ -1,0 +1,19 @@
+{
+  "name": "@nossef/api-contracts",
+  "private": true,
+  "version": "1.0.0",
+  "description": "OpenAPI schema generated from the Django API and the TypeScript types derived from it (PRD §9, F0-10).",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "typecheck": "tsc --noEmit -p .",
+    "lint": "node -e \"process.exit(0)\"",
+    "test": "node -e \"process.exit(0)\""
+  },
+  "devDependencies": {
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3"
+  }
+}
