@@ -89,3 +89,15 @@ pnpm api:schema                            # regenerate OpenAPI + TS types after
 
 Operational commands: `check_data_integrity` (INT-001…025), `go_live_check [--strict]`, `cleanup_generated_files`,
 `generate_vapid_keys`. Production deployment: [`docs/runbooks/deployment.md`](docs/runbooks/deployment.md).
+
+## Cloud deployment (Vercel + Neon)
+
+| Part | Where | Config |
+| --- | --- | --- |
+| Web / PWA | Vercel project `nossef` (root `apps/web`) → https://nossef.vercel.app | `apps/web/vercel.json`; env `API_ORIGIN` |
+| API | Vercel project `nossef-api` (root `apps/api`, Python function) → https://nossef-api.vercel.app | `apps/api/vercel.json`, `api/index.py`, `config/settings/vercel.py` |
+| Database | Neon project `nossef` (ap-southeast-1), pooled connection | env `DATABASE_URL` on `nossef-api` |
+
+The web app proxies `/api/*` to `nossef-api`, so cookies stay same-origin. On Vercel, Celery tasks run inline (no Redis), and
+uploaded/generated files go to ephemeral `/tmp` unless `S3_BUCKET` is configured. Run migrations from a workstation against the
+Neon direct (non-pooler) URL: `DJANGO_SETTINGS_MODULE=config.settings.vercel python manage.py migrate`.
